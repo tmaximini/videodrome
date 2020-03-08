@@ -9,21 +9,33 @@ import 'react-resizable/css/styles.css';
 const VideoContainer = styled.div`
   overflow: hidden;
   padding: 10px;
-  background-color: ${props =>
-    props.dragging ? '#272746' : 'black'};
   display: inline-block;
   width: 100%;
   height: 100%;
+  border: ${props =>
+    props.isDragging || props.isResizing || props.selected
+      ? '1px dashed red'
+      : '1px solid transparent'};
+
+  &:hover {
+    border: 1px dashed red;
+    background-color: rgba(255, 255, 255, 0.3);
+  }
 
   iframe {
-    display: ${props => (props.dragging ? 'none' : 'block')};
+    display: ${props => (props.isDragging ? 'none' : 'block')};
   }
 `;
 
-export default function VideoBox({ videoUrl, x, y }) {
-  const [dragging, setDragging] = useState(false);
-  const [width, setWidth] = useState(320);
-  const [height, setHeight] = useState(200);
+export default function VideoBox({
+  videoUrl,
+  x,
+  y,
+  handleSelected,
+  selected,
+}) {
+  const [isDragging, setIsDragging] = useState(false);
+  const [isResizing, setIsResizing] = useState(false);
 
   return (
     <Rnd
@@ -34,22 +46,28 @@ export default function VideoBox({ videoUrl, x, y }) {
         width: 320,
         height: 200,
       }}
-      onDragStart={() => setDragging(true)}
-      onDragStop={() => setDragging(false)}
-      onResizeStop={(e, direction, ref, delta, position) => {
-        setWidth(ref.style.width);
-        setHeight(ref.style.height);
+      onMouseDown={handleSelected}
+      onDragStart={() => setIsDragging(true)}
+      onResizeStart={() => setIsResizing(true)}
+      onResizeStop={() => setIsResizing(false)}
+      onDragStop={() => {
+        setIsDragging(false);
       }}
+      style={{ zIndex: selected ? 100 : 1 }}
     >
-      <VideoContainer dragging={dragging}>
+      <VideoContainer
+        isDragging={isDragging}
+        isResizing={isResizing}
+        selected={selected}
+      >
         <ReactPlayer
           url={videoUrl || 'https://streamable.com/moo'}
           playing
           loop
           controls={false}
           muted
-          height={height}
-          width={width}
+          height={'100%'}
+          width={'100%'}
         />
       </VideoContainer>
     </Rnd>

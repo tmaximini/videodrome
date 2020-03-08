@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import styled from '@emotion/styled';
-import { Global, css } from '@emotion/core';
 
 const Frame = styled.div`
   width: 100%;
@@ -10,23 +9,25 @@ const Frame = styled.div`
 `;
 
 export default function VideoFrame({ children }) {
-  return (
-    <Frame>
-      <Global
-        styles={css`
-          body,
-          #__next {
-            height: 100vh;
-          }
+  const [selected, setSelected] = useState();
 
-          *,
-          *::before,
-          *::after {
-            box-sizing: border-box;
-          }
-        `}
-      />
-      {children}
+  return (
+    <Frame
+      onMouseDown={() => {
+        // reset selection on outside click
+        setSelected(null);
+      }}
+    >
+      {children.map((child, i) =>
+        React.cloneElement(child, {
+          selected: selected === `videoframe__child__${i}`,
+          key: `videoframe__child__${i}`,
+          handleSelected: e => {
+            e.stopPropagation();
+            setSelected(`videoframe__child__${i}`);
+          },
+        }),
+      )}
     </Frame>
   );
 }
