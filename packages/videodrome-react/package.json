@@ -1,0 +1,18 @@
+{
+  "name": "videodrome-react",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {},
+  "dependencies": {
+    "@emotion/core": "^10.0.28",
+    "@emotion/styled": "^10.0.27",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "react-draggable": "^4.2.0",
+    "react-grid-layout": "^0.18.2",
+    "react-player": "^1.15.2",
+    "react-resizable": "^1.10.1",
+    "react-rnd": "^10.1.6"
+  }
+}

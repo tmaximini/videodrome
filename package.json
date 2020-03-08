@@ -1,0 +1,15 @@
+{
+  "name": "videodrome",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "yarn --cwd packages/videodrome-next dev",
+    "build": "yarn --cwd packages/videodrome-next build",
+    "start": "yarn --cwd packages/videodrome-next start"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "videodrome-next",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@zeit/next-css": "^1.0.1",
+    "lodash": "^4.17.15",
+    "next": "^9.2.2",
+    "next-compose-plugins": "^2.2.0",
+    "next-transpile-modules": "^3.0.2",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0"
+  }
+}
