@@ -13,9 +13,7 @@ const VideoContainer = styled.div`
   width: 100%;
   height: 100%;
   border: ${props =>
-    props.isDragging || props.isResizing || props.selected
-      ? '1px dashed red'
-      : '1px solid transparent'};
+    props.selected ? '1px dashed red' : '1px solid transparent'};
 
   &:hover {
     border: 1px dashed red;
@@ -28,11 +26,12 @@ const VideoContainer = styled.div`
 `;
 
 export default function VideoBox({
-  videoUrl,
+  url,
   x,
   y,
   handleSelected,
   selected,
+  zIndex,
 }) {
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
@@ -53,7 +52,7 @@ export default function VideoBox({
       onDragStop={() => {
         setIsDragging(false);
       }}
-      style={{ zIndex: selected ? 100 : 1 }}
+      style={{ zIndex: selected ? 1000 : zIndex }}
     >
       <VideoContainer
         isDragging={isDragging}
@@ -61,7 +60,7 @@ export default function VideoBox({
         selected={selected}
       >
         <ReactPlayer
-          url={videoUrl || 'https://streamable.com/moo'}
+          url={url}
           playing
           loop
           controls={false}

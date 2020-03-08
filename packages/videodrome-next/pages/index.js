@@ -18,11 +18,7 @@ const Home = () => {
           }
         `}
       />
-      <VideoFrame>
-        <VideoBox />
-        <VideoBox videoUrl="https://streamable.com/ifjh" />
-        <UserVideo />
-      </VideoFrame>
+      <VideoFrame />
     </>
   );
 };

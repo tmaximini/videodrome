@@ -9,7 +9,11 @@
     "start": "next start"
   },
   "dependencies": {
+    "@chakra-ui/core": "^0.6.1",
+    "@emotion/core": "^10.0.28",
+    "@emotion/styled": "^10.0.27",
     "@zeit/next-css": "^1.0.1",
+    "emotion-theming": "^10.0.27",
     "lodash": "^4.17.15",
     "next": "^9.2.2",
     "next-compose-plugins": "^2.2.0",

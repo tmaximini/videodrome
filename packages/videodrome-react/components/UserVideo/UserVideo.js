@@ -20,5 +20,5 @@ export default function UserVideo(props) {
     getUserStream();
   }, []);
 
-  return <VideoBox videoUrl={stream} {...props} />;
+  return stream ? <VideoBox url={stream} {...props} /> : <></>;
 }
