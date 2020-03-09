@@ -10,6 +10,8 @@
   "scripts": {
     "dev": "yarn --cwd packages/videodrome-next dev",
     "build": "yarn --cwd packages/videodrome-next build",
-    "start": "yarn --cwd packages/videodrome-next start"
+    "start": "yarn --cwd packages/videodrome-next start",
+    "test:react": "yarn --cwd packages/videodrome-react test",
+    "test": "yarn test:react"
   }
 }

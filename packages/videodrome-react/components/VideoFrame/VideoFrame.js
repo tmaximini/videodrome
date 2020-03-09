@@ -15,51 +15,43 @@ const Frame = styled.div`
   background-color: #222;
 `;
 
-const Elements = [
-  {
-    id: 'abcde',
-    name: 'cow',
-    url: 'https://streamable.com/moo',
-    width: 320,
-    height: 200,
-    x: 0,
-    y: 0,
-    zIndex: 1,
-    type: 'video',
-    selected: true,
-  },
-  {
-    id: 'abasddsa',
-    name: 'dog',
-    url: 'https://streamable.com/ifjh',
-    width: 320,
-    height: 200,
-    x: 200,
-    y: 200,
-    zIndex: 2,
-    type: 'video',
-  },
-  {
-    id: 'camera',
-    name: 'webcam',
-    width: 200,
-    height: 200,
-    x: 400,
-    y: 0,
-    zIndex: 3,
-    type: 'userMedia',
-  },
-];
+// const Elements = [
+//   {
+//     id: 'abcde',
+//     name: 'cow',
+//     url: 'https://streamable.com/moo',
+//     width: 320,
+//     height: 200,
+//     x: 0,
+//     y: 0,
+//     zIndex: 1,
+//     type: 'video',
+//     selected: true,
+//   },
+//   {
+//     id: 'abasddsa',
+//     name: 'dog',
+//     url: 'https://streamable.com/ifjh',
+//     width: 320,
+//     height: 200,
+//     x: 200,
+//     y: 200,
+//     zIndex: 2,
+//     type: 'video',
+//   },
+//   {
+//     id: 'camera',
+//     name: 'webcam',
+//     width: 200,
+//     height: 200,
+//     x: 400,
+//     y: 0,
+//     zIndex: 3,
+//     type: 'userMedia',
+//   },
+// ];
 
-const ITEM_DEFAULTS = {
-  x: 200,
-  y: 200,
-  zIndex: 5,
-  width: 320,
-  height: 200,
-};
-
-function reducer(state, action) {
+export function reducer(state, action) {
   console.log({ action });
 
   switch (action.type) {
@@ -81,8 +73,9 @@ function reducer(state, action) {
         elements: [
           ...state.elements,
           {
-            ...state.action.payload.item,
-            zIndex: state.elements.length + 1,
+            ...action.payload.item,
+            zIndex:
+              action.payload.item.zIndex || state.elements.length + 1,
           },
         ],
       };
@@ -120,7 +113,7 @@ function reducer(state, action) {
 
 export default function VideoFrame() {
   const [state, dispatch] = useReducer(reducer, {
-    elements: Elements,
+    elements: [],
   });
 
   const handleSelect = (e, el) => {
