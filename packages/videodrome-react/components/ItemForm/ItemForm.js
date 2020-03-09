@@ -32,11 +32,16 @@ const ControlPanel = styled.div`
 `;
 
 export default function ItemForm({ item, onSubmit }) {
-  const { register, handleSubmit, watch, setValue, errors } = useForm(
-    {
-      defaultValues: { ...item },
-    },
-  );
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    errors,
+    getValues,
+  } = useForm({
+    defaultValues: { ...item },
+  });
 
   React.useEffect(() => {
     for (const key in item) {
@@ -49,16 +54,13 @@ export default function ItemForm({ item, onSubmit }) {
   return (
     <ControlPanel>
       <FormControl>
-        <input
-          type="hidden"
-          name="id"
-          ref={register({ required: true })}
-        />
+        <input type="hidden" name="id" ref={register} />
         <FormLabel htmlFor="name">Name</FormLabel>
         <Input
           type="text"
           name="name"
           isRequired
+          autoComplete="off"
           placeholder="Name"
           size="sm"
           ref={register({ required: true })}
@@ -132,7 +134,13 @@ export default function ItemForm({ item, onSubmit }) {
             </Stack>
           </Flex>
         </div>
-        <Button onClick={handleSubmit(onSubmit)}>Submit</Button>
+        <Button
+          onClick={() => {
+            onSubmit(getValues());
+          }}
+        >
+          Submit
+        </Button>
       </FormControl>
     </ControlPanel>
   );

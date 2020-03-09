@@ -7,3 +7,4 @@ export { default as VideoSources } from './components/VideoSources/VideoSources'
 export { default as VideoSourceElement } from './components/VideoSourceElement/VideoSourceElement';
 export { default as VideoSourceControls } from './components/VideoSourceControls/VideoSourceControls';
 export { default as ItemForm } from './components/ItemForm/ItemForm';
+export { default as ModalWindow } from './components/ModalWindow/ModalWindow';

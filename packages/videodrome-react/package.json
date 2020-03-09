@@ -15,6 +15,7 @@
     "react-hook-form": "^5.0.3",
     "react-player": "^1.15.2",
     "react-resizable": "^1.10.1",
-    "react-rnd": "^10.1.6"
+    "react-rnd": "^10.1.6",
+    "uuid": "^7.0.2"
   }
 }

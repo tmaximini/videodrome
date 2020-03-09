@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import styled from '@emotion/styled';
 import {
@@ -50,7 +51,17 @@ const Elements = [
   },
 ];
 
+const ITEM_DEFAULTS = {
+  x: 200,
+  y: 200,
+  zIndex: 5,
+  width: 320,
+  height: 200,
+};
+
 function reducer(state, action) {
+  console.log({ action });
+
   switch (action.type) {
     case 'setActive':
       const newElements = state.elements.map(item => ({
@@ -98,6 +109,10 @@ function reducer(state, action) {
           ...state.elements.slice(index + 1, state.elements.length),
         ],
       };
+    case 'createItem':
+      return {
+        elements: [...state.elements, { ...action.payload.item }],
+      };
     default:
       throw new Error();
   }
@@ -120,6 +135,9 @@ export default function VideoFrame() {
 
   const handleUpdateItem = item =>
     dispatch({ type: 'updateItem', payload: { item } });
+
+  const handleCreateItem = item =>
+    dispatch({ type: 'createItem', payload: { item } });
 
   return (
     <Frame
@@ -167,6 +185,7 @@ export default function VideoFrame() {
           dispatch({ type: 'setActive', payload: { id } })
         }
         handleUpdate={handleUpdateItem}
+        handleCreate={handleCreateItem}
         elements={state.elements}
         activeElement={getActiveElement()}
       />

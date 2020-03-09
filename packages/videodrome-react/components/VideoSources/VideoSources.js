@@ -14,6 +14,7 @@ const VideoSourcesContainer = styled.div`
     flex-direction: column;
     align-items: center;
     flex-wrap: nowrap;
+    margin-bottom: 30px;
   }
 
   .item {
@@ -44,6 +45,7 @@ export default function VideoSources({
   elements,
   activeElement,
   handleUpdate,
+  handleCreate,
 }) {
   const sortByZIndex = (a, b) => {
     if (a.zIndex > b.zIndex) return -1;
@@ -68,6 +70,7 @@ export default function VideoSources({
           removeItem={onRemoveItem}
           activeElement={activeElement}
           handleUpdate={handleUpdate}
+          handleCreate={handleCreate}
         />
       </VideoSourcesContainer>
     </ControlsContainer>
