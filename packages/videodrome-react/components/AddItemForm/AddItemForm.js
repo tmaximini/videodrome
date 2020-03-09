@@ -10,7 +10,7 @@ import {
 
 const ControlPanel = styled.div`
   position: absolute;
-  right: 0;
+  right: 8px;
   top: 50%;
   background-color: green;
   padding: 10px;
@@ -24,22 +24,11 @@ const ControlPanel = styled.div`
   }
 `;
 
-export default function VideoControlPanel({ activeElement }) {
-  if (!activeElement) {
-    return null;
-  }
-
-  console.info({ activeElement });
-
+export default function AddItemForm({ onAddItem }) {
   return (
     <ControlPanel>
       <FormControl>
-        <Input
-          type="text"
-          name="id"
-          disabled
-          value={activeElement.id}
-        />
+        <Input type="text" name="id" isRequired />
         <Select>
           <option
             value="video"
@@ -62,24 +51,17 @@ export default function VideoControlPanel({ activeElement }) {
         )}
         <FormLabel htmlFor="width">width</FormLabel>
         <Input
-          type="text"
+          type="number"
           placeholder="width"
           name="width"
           value={activeElement.width}
         />
         <FormLabel htmlFor="height">height</FormLabel>
         <Input
-          type="text"
+          type="number"
           placeholder="height"
           name="height"
           value={activeElement.height}
-        />
-        <FormLabel htmlFor="z-index">z-index</FormLabel>
-        <Input
-          type="text"
-          placeholder="z-index"
-          name="zIndex"
-          value={activeElement.zIndex}
         />
       </FormControl>
     </ControlPanel>

@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 
 import styled from '@emotion/styled';
-import { UserVideo, VideoControlPanel, VideoBox } from '../..';
+import {
+  UserVideo,
+  ElementInspector,
+  VideoBox,
+  VideoSources,
+} from '../..';
 
 const Frame = styled.div`
   width: 100%;
@@ -30,34 +35,65 @@ const Elements = [
     zIndex: 2,
     type: 'video',
   },
-  {
-    id: 'c',
-    width: 200,
-    height: 200,
-    x: 400,
-    y: 0,
-    zIndex: 3,
-    type: 'userMedia',
-  },
+  // {
+  //   id: 'c',
+  //   width: 200,
+  //   height: 200,
+  //   x: 400,
+  //   y: 0,
+  //   zIndex: 3,
+  //   type: 'userMedia',
+  // },
 ];
 
+function reducer(state, action) {
+  switch (action.type) {
+    case 'setActive':
+      const newElements = state.elements.map(item => ({
+        ...item,
+        selected: item.id === action.payload.id,
+      }));
+      return { elements: newElements };
+    case 'resetSelection':
+      return {
+        elements: state.elements.map(el => ({
+          ...el,
+          selected: false,
+        })),
+      };
+    case 'addItem':
+      return {
+        elements: [
+          ...state.elements,
+          {
+            ...state.action.payload.item,
+            zIndex: state.elements.length + 1,
+          },
+        ],
+      };
+    case 'removeItem':
+      return {
+        elements: state.elements.filter(
+          item => item.id !== action.payload.id,
+        ),
+      };
+    default:
+      throw new Error();
+  }
+}
+
 export default function VideoFrame() {
-  const [elements, setElements] = useState(Elements);
+  const [state, dispatch] = useReducer(reducer, {
+    elements: Elements,
+  });
 
   const handleSelected = (e, el) => {
     e.stopPropagation();
-    setElements(
-      elements.map(item => ({
-        ...item,
-        selected: item.id === el.id,
-      })),
-    );
+    dispatch({ type: 'setActive', payload: { id: el.id } });
   };
 
-  const resetSelection = () =>
-    setElements(elements.map(el => ({ ...el, selected: false })));
-
-  const getActiveElement = () => elements.find(el => el.selected);
+  const getActiveElement = () =>
+    state.elements.find(el => el.selected);
 
   return (
     <Frame
@@ -66,7 +102,7 @@ export default function VideoFrame() {
     //   resetSelection();
     // }}
     >
-      {Elements.map((el, i) => {
+      {state.elements.map((el, i) => {
         if (el.type === 'video') {
           return (
             <VideoBox
@@ -96,7 +132,22 @@ export default function VideoFrame() {
           );
         }
       })}
-      <VideoControlPanel activeElement={getActiveElement()} />
+      <ElementInspector activeElement={getActiveElement()} />
+
+      <VideoSources
+        onAddItem={item =>
+          dispatch({ type: 'addItem', payload: { item } })
+        }
+        onRemoveItem={id =>
+          dispatch({ type: 'removeItem', payload: { id } })
+        }
+        onSelectItem={id =>
+          dispatch({ type: 'setActive', payload: { id } })
+        }
+        elements={state.elements}
+      />
+
+      {/* <AddItemForm /> */}
     </Frame>
   );
 }

@@ -36,6 +36,8 @@ export default function VideoBox({
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
 
+  console.log({ selected, url });
+
   return (
     <Rnd
       bounds="parent"
