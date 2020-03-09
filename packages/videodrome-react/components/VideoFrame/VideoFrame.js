@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import styled from '@emotion/styled';
@@ -15,106 +15,100 @@ const Frame = styled.div`
   background-color: #222;
 `;
 
-// const Elements = [
-//   {
-//     id: 'abcde',
-//     name: 'cow',
-//     url: 'https://streamable.com/moo',
-//     width: 320,
-//     height: 200,
-//     x: 0,
-//     y: 0,
-//     zIndex: 1,
-//     type: 'video',
-//     selected: true,
-//   },
-//   {
-//     id: 'abasddsa',
-//     name: 'dog',
-//     url: 'https://streamable.com/ifjh',
-//     width: 320,
-//     height: 200,
-//     x: 200,
-//     y: 200,
-//     zIndex: 2,
-//     type: 'video',
-//   },
-//   {
-//     id: 'camera',
-//     name: 'webcam',
-//     width: 200,
-//     height: 200,
-//     x: 400,
-//     y: 0,
-//     zIndex: 3,
-//     type: 'userMedia',
-//   },
-// ];
+const persistState = state => {
+  localStorage.setItem('videodrome', JSON.stringify(state));
+};
 
-export function reducer(state, action) {
-  console.log({ action });
+const recoverState = () => {
+  const state = localStorage.getItem('videodrome');
 
-  switch (action.type) {
-    case 'setActive':
-      const newElements = state.elements.map(item => ({
-        ...item,
-        selected: item.id === action.payload.id,
-      }));
-      return { elements: newElements };
-    case 'resetSelection':
-      return {
-        elements: state.elements.map(el => ({
-          ...el,
-          selected: false,
-        })),
-      };
-    case 'addItem':
-      return {
-        elements: [
-          ...state.elements,
-          {
-            ...action.payload.item,
-            zIndex:
-              action.payload.item.zIndex || state.elements.length + 1,
-          },
-        ],
-      };
-    case 'removeItem':
-      return {
-        elements: state.elements.filter(
-          item => item.id !== action.payload.id,
-        ),
-      };
-    case 'updateItem':
-      const index = state.elements.findIndex(
-        item => item.id === action.payload.item.id,
-      );
+  return state ? JSON.parse(state) : { elements: [] };
+};
 
-      if (index === undefined) {
-        console.warn('index not found');
-        return { elements: state.elements };
-      }
+export function reducer(_state, _action) {
+  const handleStateUpdate = (state, action) => {
+    switch (action.type) {
+      case 'setActive':
+        const newElements = state.elements.map(item => ({
+          ...item,
+          selected: item.id === action.payload.id,
+        }));
+        return { elements: newElements };
+      case 'resetSelection':
+        return {
+          elements: state.elements.map(el => ({
+            ...el,
+            selected: false,
+          })),
+        };
+      case 'addItem':
+        return {
+          elements: [
+            ...state.elements,
+            {
+              ...action.payload.item,
+              zIndex:
+                action.payload.item.zIndex ||
+                state.elements.length + 1,
+            },
+          ],
+        };
+      case 'removeItem':
+        return {
+          elements: state.elements.filter(
+            item => item.id !== action.payload.id,
+          ),
+        };
+      case 'updateItem':
+        const index = state.elements.findIndex(
+          item => item.id === action.payload.item.id,
+        );
 
-      return {
-        elements: [
-          ...state.elements.slice(0, index),
-          { ...state.elements[index], ...action.payload.item },
-          ...state.elements.slice(index + 1, state.elements.length),
-        ],
-      };
-    case 'createItem':
-      return {
-        elements: [...state.elements, { ...action.payload.item }],
-      };
-    default:
-      throw new Error();
-  }
+        if (index === undefined) {
+          console.warn('index not found');
+          return { elements: state.elements };
+        }
+
+        return {
+          elements: [
+            ...state.elements.slice(0, index),
+            { ...state.elements[index], ...action.payload.item },
+            ...state.elements.slice(index + 1, state.elements.length),
+          ],
+        };
+      case 'createItem':
+        return {
+          elements: [...state.elements, { ...action.payload.item }],
+        };
+
+      case 'restoreState':
+        return action.payload.state;
+      default:
+        throw new Error();
+    }
+  };
+
+  const nextState = handleStateUpdate(_state, _action);
+  persistState(nextState);
+  return nextState;
 }
 
 export default function VideoFrame() {
   const [state, dispatch] = useReducer(reducer, {
     elements: [],
   });
+
+  useEffect(() => {
+    try {
+      const stateFromStorage = recoverState();
+      dispatch({
+        type: 'restoreState',
+        payload: { state: stateFromStorage },
+      });
+    } catch (err) {
+      // handle err
+    }
+  }, []);
 
   const handleSelect = (e, el) => {
     e.stopPropagation();

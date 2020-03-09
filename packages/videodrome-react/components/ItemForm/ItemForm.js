@@ -10,6 +10,7 @@ import {
   Button,
   Flex,
   Stack,
+  Checkbox,
 } from '@chakra-ui/core';
 
 const ControlPanel = styled.div`
@@ -80,6 +81,9 @@ export default function ItemForm({ item, onSubmit }) {
             <Input size="sm" type="text" name="url" ref={register} />
           </>
         )}
+        <FormLabel htmlFor="showControls">Show Controls</FormLabel>
+        <Checkbox name="showControls" ref={register} />
+
         <div className="bottom">
           <Flex>
             <Stack>
