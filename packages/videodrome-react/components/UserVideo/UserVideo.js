@@ -20,5 +20,11 @@ export default function UserVideo(props) {
     getUserStream();
   }, []);
 
-  return stream ? <VideoBox url={stream} {...props} /> : <></>;
+  const { element, ...rest } = props;
+
+  return stream ? (
+    <VideoBox element={{ ...props.element, url: stream }} {...rest} />
+  ) : (
+    <></>
+  );
 }

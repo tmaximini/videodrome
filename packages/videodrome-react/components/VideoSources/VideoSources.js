@@ -43,6 +43,7 @@ export default function VideoSources({
   onSelectItem,
   elements,
   activeElement,
+  handleUpdate,
 }) {
   return (
     <ControlsContainer
@@ -63,6 +64,7 @@ export default function VideoSources({
           addItem={onAddItem}
           removeItem={onRemoveItem}
           activeElement={activeElement}
+          handleUpdate={handleUpdate}
         />
       </VideoSourcesContainer>
     </ControlsContainer>

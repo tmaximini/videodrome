@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import styled from '@emotion/styled';
 import { Rnd } from 'react-rnd';
@@ -30,11 +30,20 @@ const CtrlsContainer = styled.div`
   }
 `;
 
-export default function ControlsContainer({
-  children,
-  title,
-  position,
-}) {
+export default function ControlsContainer({ children, title }) {
+  const [position, setPosition] = useState({ x: 500, y: 500 });
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setPosition({
+      x: window.innerWidth - 320,
+      y: window.innerHeight / 2 + 175,
+    });
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
     <Rnd
       bounds="parent"

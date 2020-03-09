@@ -60,7 +60,7 @@ export default function VideoBox({
         });
         setIsResizing(false);
       }}
-      style={{ zIndex: selected ? 1000 : zIndex }}
+      style={{ zIndex: isDragging ? 1000 : zIndex }}
     >
       <VideoContainer
         isDragging={isDragging}

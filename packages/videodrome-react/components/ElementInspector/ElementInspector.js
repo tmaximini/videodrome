@@ -1,12 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import styled from '@emotion/styled';
-import {
-  Input,
-  FormControl,
-  FormLabel,
-  Select,
-} from '@chakra-ui/core';
 import { ControlsContainer, ItemForm } from '../..';
 
 const InspectorContainer = styled.div`
@@ -37,10 +31,7 @@ export default function ElementInspector({
   }
 
   return (
-    <ControlsContainer
-      title="Inspector"
-      position={{ x: 500, y: 500, z: 1000 }}
-    >
+    <ControlsContainer title="Inspector" pos="right">
       <InspectorContainer>
         <div className="form">
           <ItemForm item={activeElement} onSubmit={handleUpdate} />

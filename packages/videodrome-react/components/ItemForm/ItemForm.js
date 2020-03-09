@@ -120,6 +120,16 @@ export default function ItemForm({ item, onSubmit }) {
                 ref={register}
               />
             </Stack>
+            <Stack>
+              <FormLabel htmlFor="z">z</FormLabel>
+              <Input
+                size="sm"
+                type="number"
+                placeholder="z"
+                name="zIndex"
+                ref={register}
+              />
+            </Stack>
           </Flex>
         </div>
         <Button onClick={handleSubmit(onSubmit)}>Submit</Button>

@@ -38,15 +38,16 @@ const Elements = [
     zIndex: 2,
     type: 'video',
   },
-  // {
-  //   id: 'c',
-  //   width: 200,
-  //   height: 200,
-  //   x: 400,
-  //   y: 0,
-  //   zIndex: 3,
-  //   type: 'userMedia',
-  // },
+  {
+    id: 'camera',
+    name: 'webcam',
+    width: 200,
+    height: 200,
+    x: 400,
+    y: 0,
+    zIndex: 3,
+    type: 'userMedia',
+  },
 ];
 
 function reducer(state, action) {
@@ -165,7 +166,7 @@ export default function VideoFrame() {
         onSelectItem={id =>
           dispatch({ type: 'setActive', payload: { id } })
         }
-        onUpdate={handleUpdateItem}
+        handleUpdate={handleUpdateItem}
         elements={state.elements}
         activeElement={getActiveElement()}
       />
