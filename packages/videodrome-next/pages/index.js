@@ -9,6 +9,8 @@ const Home = () => {
           body,
           #__next {
             height: 100vh;
+            font-family: -apple-system, system-ui, BlinkMacSystemFont,
+              'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
           }
 
           *,

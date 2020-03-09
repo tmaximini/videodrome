@@ -24,6 +24,7 @@ const Elements = [
     y: 0,
     zIndex: 1,
     type: 'video',
+    selected: true,
   },
   {
     id: 'b',
@@ -145,6 +146,7 @@ export default function VideoFrame() {
           dispatch({ type: 'setActive', payload: { id } })
         }
         elements={state.elements}
+        activeElement={getActiveElement()}
       />
 
       {/* <AddItemForm /> */}

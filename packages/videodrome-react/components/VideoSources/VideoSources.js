@@ -1,36 +1,21 @@
 import React from 'react';
 
 import styled from '@emotion/styled';
-import { Rnd } from 'react-rnd';
 
-import { VideoSourceElement } from '../..';
+import {
+  VideoSourceElement,
+  VideoSourceControls,
+  ControlsContainer,
+} from '../..';
 
 const VideoSourcesContainer = styled.div`
-  border-radius: 5px;
-  background-color: #666;
-  color: white;
-  width: 400px;
-  position: absolute;
-  bottom: 8px;
-  border: 2px solid #666;
-
-  .headline {
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    text-align: center;
-    background-color: #666;
-    height: 15px;
-    width: 100%;
-  }
   .sourceList {
-    background-color: #333;
-    padding: 5px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     flex-wrap: nowrap;
-    margin: 5px 0;
   }
+
   .item {
     width: 100%;
     padding: 2px 0;
@@ -41,6 +26,15 @@ const VideoSourcesContainer = styled.div`
   .selected {
     background-color: blue;
   }
+
+  .controls {
+    position: absolute;
+    bottom: 5px;
+    button {
+      margin: 2px;
+      border: 0;
+    }
+  }
 `;
 
 export default function VideoSources({
@@ -48,19 +42,14 @@ export default function VideoSources({
   onRemoveItem,
   onSelectItem,
   elements,
+  activeElement,
 }) {
   return (
-    <Rnd
-      bounds="parent"
-      default={{
-        x: 10,
-        y: 500,
-        width: 320,
-        height: 200,
-      }}
+    <ControlsContainer
+      title="Sources"
+      position={{ x: 100, y: 500, z: 10 }}
     >
       <VideoSourcesContainer>
-        <div className="headline">Sources</div>
         <div className="sourceList">
           {elements.map(el => (
             <VideoSourceElement
@@ -69,7 +58,12 @@ export default function VideoSources({
             />
           ))}
         </div>
+        <VideoSourceControls
+          addItem={onAddItem}
+          removeItem={onRemoveItem}
+          activeElement={activeElement}
+        />
       </VideoSourcesContainer>
-    </Rnd>
+    </ControlsContainer>
   );
 }
