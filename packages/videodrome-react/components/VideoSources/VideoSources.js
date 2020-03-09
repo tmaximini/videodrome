@@ -45,14 +45,17 @@ export default function VideoSources({
   activeElement,
   handleUpdate,
 }) {
+  const sortByZIndex = (a, b) => {
+    if (a.zIndex > b.zIndex) return -1;
+    if (b.zIndex > a.zIndex) return 1;
+    return 0;
+  };
+
   return (
-    <ControlsContainer
-      title="Sources"
-      position={{ x: 100, y: 500, z: 10 }}
-    >
+    <ControlsContainer title="Sources" offset={150}>
       <VideoSourcesContainer>
         <div className="sourceList">
-          {elements.map(el => (
+          {elements.sort(sortByZIndex).map(el => (
             <VideoSourceElement
               key={el.id}
               onClick={() => onSelectItem(el.id)}

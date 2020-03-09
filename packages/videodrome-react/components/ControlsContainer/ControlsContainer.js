@@ -30,14 +30,18 @@ const CtrlsContainer = styled.div`
   }
 `;
 
-export default function ControlsContainer({ children, title }) {
+export default function ControlsContainer({
+  children,
+  title,
+  offset = 0,
+}) {
   const [position, setPosition] = useState({ x: 500, y: 500 });
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setPosition({
-      x: window.innerWidth - 320,
-      y: window.innerHeight / 2 + 175,
+      x: window.innerWidth - 305,
+      y: window.innerHeight / 2 + 175 + offset,
     });
     setMounted(true);
   }, []);
@@ -52,7 +56,7 @@ export default function ControlsContainer({ children, title }) {
         y: position.y,
       }}
       dragHandleClassName="headline"
-      style={{ zIndex: position.z }}
+      style={{ zIndex: 1000 }}
       onMouseDown={e => e.stopPropagation()}
     >
       <CtrlsContainer>

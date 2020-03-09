@@ -52,7 +52,6 @@ export default function VideoBox({
         setIsDragging(false);
       }}
       onResizeStop={(e, direction, ref, delta, position) => {
-        console.log({ ref });
         handleUpdate({
           width: ref.clientWidth,
           height: ref.clientHeight,

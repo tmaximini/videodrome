@@ -1,6 +1,7 @@
 import React from 'react';
 import { theme } from '@chakra-ui/core';
 import { ThemeProvider } from '@chakra-ui/core';
+import { Global, css } from '@emotion/core';
 
 // Let's say you want to add custom colors
 const customTheme = {
@@ -57,6 +58,25 @@ const customTheme = {
 function MyApp({ Component, pageProps }) {
   return (
     <ThemeProvider theme={customTheme}>
+      <Global
+        styles={css`
+          body {
+            margin: 0;
+          }
+          body,
+          #__next {
+            height: 100vh;
+            font-family: -apple-system, system-ui, BlinkMacSystemFont,
+              'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+          }
+
+          *,
+          *::before,
+          *::after {
+            box-sizing: border-box;
+          }
+        `}
+      />
       <Component {...pageProps} />
     </ThemeProvider>
   );
