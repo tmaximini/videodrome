@@ -6,7 +6,7 @@ export default function VideoSourceElement({ onClick, element }) {
       onClick={onClick}
       className={element.selected ? 'item selected' : 'item'}
     >
-      {element.type}
+      {element.type} <i>({element.name})</i>
     </div>
   );
 }

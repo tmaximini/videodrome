@@ -53,6 +53,7 @@ export default function VideoSources({
         <div className="sourceList">
           {elements.map(el => (
             <VideoSourceElement
+              key={el.id}
               onClick={() => onSelectItem(el.id)}
               element={el}
             />

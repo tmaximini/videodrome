@@ -16,9 +16,10 @@ const Frame = styled.div`
 
 const Elements = [
   {
-    id: 'a',
+    id: 'abcde',
+    name: 'cow',
     url: 'https://streamable.com/moo',
-    width: 200,
+    width: 320,
     height: 200,
     x: 0,
     y: 0,
@@ -27,9 +28,10 @@ const Elements = [
     selected: true,
   },
   {
-    id: 'b',
+    id: 'abasddsa',
+    name: 'dog',
     url: 'https://streamable.com/ifjh',
-    width: 200,
+    width: 320,
     height: 200,
     x: 200,
     y: 200,
@@ -78,6 +80,23 @@ function reducer(state, action) {
           item => item.id !== action.payload.id,
         ),
       };
+    case 'updateItem':
+      const index = state.elements.findIndex(
+        item => item.id === action.payload.item.id,
+      );
+
+      if (index === undefined) {
+        console.warn('index not found');
+        return { elements: state.elements };
+      }
+
+      return {
+        elements: [
+          ...state.elements.slice(0, index),
+          { ...state.elements[index], ...action.payload.item },
+          ...state.elements.slice(index + 1, state.elements.length),
+        ],
+      };
     default:
       throw new Error();
   }
@@ -88,13 +107,16 @@ export default function VideoFrame() {
     elements: Elements,
   });
 
-  const handleSelected = (e, el) => {
+  const handleSelect = (e, el) => {
     e.stopPropagation();
     dispatch({ type: 'setActive', payload: { id: el.id } });
   };
 
   const getActiveElement = () =>
     state.elements.find(el => el.selected);
+
+  const handleUpdateItem = item =>
+    dispatch({ type: 'updateItem', payload: { item } });
 
   return (
     <Frame
@@ -107,33 +129,29 @@ export default function VideoFrame() {
         if (el.type === 'video') {
           return (
             <VideoBox
-              url={el.url}
-              x={el.x}
-              y={el.y}
-              zIndex={el.zIndex}
-              width={el.width}
-              height={el.height}
+              element={el}
               key={`videoframe__child__${i}`}
               selected={el.selected}
-              handleSelected={e => handleSelected(e, el)}
+              handleSelect={e => handleSelect(e, el)}
+              handleUpdate={handleUpdateItem}
             />
           );
         } else {
           return (
             <UserVideo
-              x={el.x}
-              y={el.y}
-              zIndex={el.zIndex}
-              width={el.width}
-              height={el.height}
+              element={el}
               key={`videoframe__child__${i}`}
               selected={el.selected}
-              handleSelected={e => handleSelected(e, el)}
+              handleSelect={e => handleSelect(e, el)}
+              handleUpdate={handleUpdateItem}
             />
           );
         }
       })}
-      <ElementInspector activeElement={getActiveElement()} />
+      <ElementInspector
+        activeElement={getActiveElement()}
+        handleUpdate={handleUpdateItem}
+      />
 
       <VideoSources
         onAddItem={item =>
@@ -145,11 +163,10 @@ export default function VideoFrame() {
         onSelectItem={id =>
           dispatch({ type: 'setActive', payload: { id } })
         }
+        onUpdate={handleUpdateItem}
         elements={state.elements}
         activeElement={getActiveElement()}
       />
-
-      {/* <AddItemForm /> */}
     </Frame>
   );
 }

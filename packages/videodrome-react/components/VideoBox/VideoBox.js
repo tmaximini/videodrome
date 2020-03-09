@@ -26,12 +26,10 @@ const VideoContainer = styled.div`
 `;
 
 export default function VideoBox({
-  url,
-  x,
-  y,
-  handleSelected,
+  element: { url, x, y, width, height, zIndex, id },
+  handleSelect,
+  handleUpdate,
   selected,
-  zIndex,
 }) {
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
@@ -40,17 +38,27 @@ export default function VideoBox({
     <Rnd
       bounds="parent"
       default={{
-        x: x || 0,
-        y: y || 0,
-        width: 320,
-        height: 200,
+        x,
+        y,
+        width,
+        height,
       }}
-      onMouseDown={handleSelected}
+      onMouseDown={handleSelect}
       onDragStart={() => setIsDragging(true)}
       onResizeStart={() => setIsResizing(true)}
       onResizeStop={() => setIsResizing(false)}
-      onDragStop={() => {
+      onDragStop={(e, item) => {
+        handleUpdate({ x: item.x, y: item.x, id });
         setIsDragging(false);
+      }}
+      onResizeStop={(e, direction, ref, delta, position) => {
+        console.log({ ref });
+        handleUpdate({
+          width: ref.clientWidth,
+          height: ref.clientHeight,
+          id,
+        });
+        setIsResizing(false);
       }}
       style={{ zIndex: selected ? 1000 : zIndex }}
     >

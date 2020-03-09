@@ -6,3 +6,4 @@ export { default as ElementInspector } from './components/ElementInspector/Eleme
 export { default as VideoSources } from './components/VideoSources/VideoSources';
 export { default as VideoSourceElement } from './components/VideoSourceElement/VideoSourceElement';
 export { default as VideoSourceControls } from './components/VideoSourceControls/VideoSourceControls';
+export { default as ItemForm } from './components/ItemForm/ItemForm';
