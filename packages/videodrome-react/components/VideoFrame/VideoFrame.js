@@ -112,6 +112,8 @@ export default function VideoFrame() {
     dispatch({ type: 'setActive', payload: { id: el.id } });
   };
 
+  const resetSelection = () => dispatch({ type: 'resetSelection' });
+
   const getActiveElement = () =>
     state.elements.find(el => el.selected);
 
@@ -120,10 +122,10 @@ export default function VideoFrame() {
 
   return (
     <Frame
-    // onMouseDown={() => {
-    //   // reset selection on outside click
-    //   resetSelection();
-    // }}
+      onMouseDown={() => {
+        // reset selection on outside click
+        resetSelection();
+      }}
     >
       {state.elements.map((el, i) => {
         if (el.type === 'video') {

@@ -26,7 +26,7 @@ const VideoContainer = styled.div`
 `;
 
 export default function VideoBox({
-  element: { url, x, y, width, height, zIndex, id },
+  element: { url, x, y, width, height, zIndex, id, controls },
   handleSelect,
   handleUpdate,
   selected,
@@ -71,7 +71,7 @@ export default function VideoBox({
           url={url}
           playing
           loop
-          controls={false}
+          controls={controls}
           muted
           height={'100%'}
           width={'100%'}

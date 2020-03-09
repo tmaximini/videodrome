@@ -44,6 +44,7 @@ export default function ControlsContainer({
       }}
       dragHandleClassName="headline"
       style={{ zIndex: position.z }}
+      onMouseDown={e => e.stopPropagation()}
     >
       <CtrlsContainer>
         <div className="headline">{title}</div>
