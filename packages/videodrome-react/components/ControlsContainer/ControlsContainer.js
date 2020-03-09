@@ -1,4 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+} from 'react';
 
 import styled from '@emotion/styled';
 import { Rnd } from 'react-rnd';
@@ -35,8 +40,23 @@ export default function ControlsContainer({
   title,
   offset = 0,
 }) {
-  const [position, setPosition] = useState({ x: 500, y: 500 });
+  const ref = useRef();
+
   const [mounted, setMounted] = useState(false);
+  const [position, setPosition] = useState({ x: 500, y: 500 });
+
+  function setLayout() {
+    if (
+      ref &&
+      ref.current &&
+      typeof ref.current.updatePosition === 'function'
+    ) {
+      ref.current.updatePosition({
+        x: window.innerWidth - 305,
+        y: window.innerHeight / 2 + 175 + offset,
+      });
+    }
+  }
 
   useEffect(() => {
     setPosition({
@@ -46,11 +66,17 @@ export default function ControlsContainer({
     setMounted(true);
   }, []);
 
+  useLayoutEffect(() => {
+    window.addEventListener('resize', setLayout);
+    return () => window.removeEventListener('resize', setLayout);
+  }, []);
+
   if (!mounted) return null;
 
   return (
     <Rnd
       bounds="parent"
+      ref={ref}
       default={{
         x: position.x,
         y: position.y,
