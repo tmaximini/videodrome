@@ -12,7 +12,7 @@ import {
   VideoSources,
   ModalWindow,
   ItemForm,
-} from '../..';
+} from '..';
 
 import {
   persistState,

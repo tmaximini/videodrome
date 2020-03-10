@@ -15,6 +15,7 @@
     "react-draggable": "^4.2.0",
     "react-grid-layout": "^0.18.2",
     "react-hook-form": "^5.0.3",
+    "react-icons": "^3.9.0",
     "react-player": "^1.15.2",
     "react-resizable": "^1.10.1",
     "react-rnd": "^10.1.6",

@@ -6,7 +6,7 @@ import {
   VideoSourceElement,
   VideoSourceControls,
   ControlsContainer,
-} from '../..';
+} from '..';
 
 const VideoSourcesContainer = styled.div`
   .sourceList {
@@ -25,7 +25,7 @@ const VideoSourcesContainer = styled.div`
     cursor: pointer;
   }
   .selected {
-    background-color: blue;
+    background-color: #3182ce;
   }
 
   .controls {

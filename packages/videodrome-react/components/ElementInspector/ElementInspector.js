@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import styled from '@emotion/styled';
-import { ControlsContainer, ItemForm } from '../..';
+import { ControlsContainer, ItemForm } from '..';
 
 const InspectorContainer = styled.div`
   .form {

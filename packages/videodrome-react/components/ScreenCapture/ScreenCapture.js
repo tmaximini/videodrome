@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { VideoBox } from '../..';
+import { VideoBox } from '..';
 
 export default function ScreenCapture(props) {
   const [stream, setStream] = useState();

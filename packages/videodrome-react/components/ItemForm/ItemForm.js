@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import styled from '@emotion/styled';
@@ -10,6 +10,7 @@ import {
   Flex,
   Stack,
   Checkbox,
+  FormHelperText,
 } from '@chakra-ui/core';
 
 const ControlPanel = styled.div`
@@ -55,7 +56,7 @@ export default function ItemForm({ item, onSubmit }) {
     defaultValues: { ...item },
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     for (const key in item) {
       setValue(key, item[key]);
     }
@@ -89,7 +90,7 @@ export default function ItemForm({ item, onSubmit }) {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     setValue('height', getHeight());
     setValue('width', getWidth());
   }, [type]);
@@ -122,6 +123,10 @@ export default function ItemForm({ item, onSubmit }) {
           <>
             <FormLabel htmlFor="url">Url</FormLabel>
             <Input size="sm" type="text" name="url" ref={register} />
+            <FormHelperText id="url-helper-text">
+              You can use urls from youtube, vimeo, streamable,
+              twitch, soundcloud, dailymotion.
+            </FormHelperText>
           </>
         )}
 
