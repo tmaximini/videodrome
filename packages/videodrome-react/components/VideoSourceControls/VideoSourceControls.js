@@ -10,8 +10,9 @@ const generateEmptyItem = () => ({
   x: 200,
   y: 200,
   zIndex: 5,
-  width: 320,
-  height: 200,
+  width: 640, // 16:9
+  height: 360,
+  lockAspectRatio: true,
   type: 'video',
   url: 'https://vimeo.com/395282487',
 });

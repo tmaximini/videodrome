@@ -26,7 +26,17 @@ const VideoContainer = styled.div`
 `;
 
 export default function VideoBox({
-  element: { url, x, y, width, height, zIndex, id, showControls },
+  element: {
+    url,
+    x,
+    y,
+    width,
+    height,
+    zIndex,
+    id,
+    showControls,
+    lockAspectRatio,
+  },
   handleSelect,
   handleUpdate,
   selected,
@@ -36,7 +46,6 @@ export default function VideoBox({
 
   return (
     <Rnd
-      bounds="parent"
       default={{
         x,
         y,
@@ -60,6 +69,7 @@ export default function VideoBox({
         setIsResizing(false);
       }}
       style={{ zIndex: isDragging ? 1000 : zIndex }}
+      lockAspectRatio={lockAspectRatio}
     >
       <VideoContainer
         isDragging={isDragging}

@@ -81,8 +81,21 @@ export default function ItemForm({ item, onSubmit }) {
             <Input size="sm" type="text" name="url" ref={register} />
           </>
         )}
-        <FormLabel htmlFor="showControls">Show Controls</FormLabel>
-        <Checkbox name="showControls" ref={register} />
+
+        <Flex>
+          <Stack>
+            <FormLabel htmlFor="lockAspectRatio">
+              Lock Aspect Ratio
+            </FormLabel>
+            <Checkbox name="lockAspectRatio" ref={register} />
+          </Stack>
+          <Stack>
+            <FormLabel htmlFor="showControls">
+              Show Controls
+            </FormLabel>
+            <Checkbox name="showControls" ref={register} />
+          </Stack>
+        </Flex>
 
         <div className="bottom">
           <Flex>
