@@ -74,6 +74,7 @@ export default function ItemForm({ item, onSubmit }) {
         >
           <option value="video">Video</option>
           <option value="userMedia">Camera</option>
+          <option value="screenCapture">Screen Capture</option>
         </select>
         {type === 'video' && (
           <>

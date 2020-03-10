@@ -1,6 +1,7 @@
 export { default as VideoBox } from './components/VideoBox/VideoBox';
 export { default as VideoFrame } from './components/VideoFrame/VideoFrame';
 export { default as UserVideo } from './components/UserVideo/UserVideo';
+export { default as ScreenCapture } from './components/ScreenCapture/ScreenCapture';
 export { default as ControlsContainer } from './components/ControlsContainer/ControlsContainer';
 export { default as ElementInspector } from './components/ElementInspector/ElementInspector';
 export { default as VideoSources } from './components/VideoSources/VideoSources';

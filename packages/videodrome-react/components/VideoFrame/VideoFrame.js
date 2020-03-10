@@ -3,9 +3,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 import styled from '@emotion/styled';
 import {
-  UserVideo,
-  ElementInspector,
   VideoBox,
+  UserVideo,
+  ScreenCapture,
+  ElementInspector,
   VideoSources,
 } from '../..';
 
@@ -134,26 +135,39 @@ export default function VideoFrame() {
       }}
     >
       {state.elements.map((el, i) => {
-        if (el.type === 'video') {
-          return (
-            <VideoBox
-              element={el}
-              key={`videoframe__child__${i}`}
-              selected={el.selected}
-              handleSelect={e => handleSelect(e, el)}
-              handleUpdate={handleUpdateItem}
-            />
-          );
-        } else {
-          return (
-            <UserVideo
-              element={el}
-              key={`videoframe__child__${i}`}
-              selected={el.selected}
-              handleSelect={e => handleSelect(e, el)}
-              handleUpdate={handleUpdateItem}
-            />
-          );
+        switch (el.type) {
+          case 'video':
+            return (
+              <VideoBox
+                element={el}
+                key={`videoframe__child__${i}`}
+                selected={el.selected}
+                handleSelect={e => handleSelect(e, el)}
+                handleUpdate={handleUpdateItem}
+              />
+            );
+          case 'userMedia':
+            return (
+              <UserVideo
+                element={el}
+                key={`videoframe__child__${i}`}
+                selected={el.selected}
+                handleSelect={e => handleSelect(e, el)}
+                handleUpdate={handleUpdateItem}
+              />
+            );
+          case 'screenCapture':
+            return (
+              <ScreenCapture
+                element={el}
+                key={`videoframe__child__${i}`}
+                selected={el.selected}
+                handleSelect={e => handleSelect(e, el)}
+                handleUpdate={handleUpdateItem}
+              />
+            );
+          default:
+            console.warn('Unsupported Element type: ', el.type);
         }
       })}
       <ElementInspector
