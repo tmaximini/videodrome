@@ -13,11 +13,11 @@ const VideoContainer = styled.div`
   width: 100%;
   height: 100%;
   border: ${props =>
-    props.selected ? '1px dashed red' : '1px solid transparent'};
+    props.selected ? '1px dashed #a68e8e' : '1px solid transparent'};
 
   &:hover {
-    border: 1px dashed red;
-    background-color: rgba(255, 255, 255, 0.3);
+    border: 1px dashed #a68e8e;
+    background-color: rgba(255, 255, 255, 0.2);
   }
 
   iframe {
@@ -53,8 +53,8 @@ export default function VideoBox({
       }}
       onResizeStop={(e, direction, ref, delta, position) => {
         handleUpdate({
-          width: ref.clientWidth,
-          height: ref.clientHeight,
+          width: parseInt(ref.clientWidth),
+          height: parseInt(ref.clientHeight),
           id,
         });
         setIsResizing(false);

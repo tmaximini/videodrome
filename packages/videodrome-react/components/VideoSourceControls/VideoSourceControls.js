@@ -65,7 +65,10 @@ export default function VideoSourceControls({
       />
       <ModalWindow isOpen={isOpen} onClose={onClose} title="New Item">
         <ItemForm
-          onSubmit={handleCreate}
+          onSubmit={data => {
+            onClose();
+            handleCreate(data);
+          }}
           item={generateEmptyItem()}
         />
       </ModalWindow>

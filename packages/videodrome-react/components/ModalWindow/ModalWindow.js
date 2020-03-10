@@ -20,16 +20,21 @@ export default function ModalWindow({
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>{title}</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>{children}</ModalBody>
-
-          <ModalFooter>
-            <Button variantColor="blue" mr={3} onClick={onClose}>
-              Close
-            </Button>
-          </ModalFooter>
+        <ModalContent
+          style={{
+            backgroundColor: '#333',
+            color: 'white',
+            border: '2px solid #666',
+            borderRadius: '5px',
+          }}
+        >
+          <ModalHeader style={{ backgroundColor: '#666' }}>
+            {title}
+          </ModalHeader>
+          <ModalCloseButton style={{ cursor: 'pointer' }} />
+          <ModalBody style={{ padding: '10px' }}>
+            {children}
+          </ModalBody>
         </ModalContent>
       </Modal>
     </>
