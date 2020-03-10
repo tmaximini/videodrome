@@ -5,6 +5,7 @@ import {
   IoLogoVimeo,
   IoLogoYoutube,
 } from 'react-icons/io';
+import { FaSoundcloud } from 'react-icons/fa';
 
 import { Box, Text, Flex } from '@chakra-ui/core';
 
@@ -15,6 +16,11 @@ export default function VideoSourceElement({ onClick, element }) {
         if (/vimeo/.test(element.url)) {
           return (
             <Box as={IoLogoVimeo} size="18px" color="grey.400" />
+          );
+        }
+        if (/soundcloud/.test(element.url)) {
+          return (
+            <Box as={FaSoundcloud} size="18px" color="grey.400" />
           );
         }
         return (

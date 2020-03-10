@@ -8,10 +8,25 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "yarn --cwd packages/videodrome-next dev",
-    "build": "yarn --cwd packages/videodrome-next build",
-    "start": "yarn --cwd packages/videodrome-next start",
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
     "test:react": "yarn --cwd packages/videodrome-react test",
     "test": "yarn test:react"
+  },
+  "dependencies": {
+    "@chakra-ui/core": "^0.6.1",
+    "@emotion/core": "^10.0.28",
+    "@emotion/styled": "^10.0.27",
+    "@zeit/next-css": "^1.0.1",
+    "emotion-theming": "^10.0.27",
+    "lodash": "^4.17.15",
+    "nanoid": "^2.1.11",
+    "next": "^9.2.2",
+    "next-compose-plugins": "^2.2.0",
+    "next-transpile-modules": "^3.0.2",
+    "normalize.css": "^8.0.1",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0"
   }
 }
