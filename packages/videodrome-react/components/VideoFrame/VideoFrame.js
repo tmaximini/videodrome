@@ -1,30 +1,30 @@
-import React, { useReducer, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import React, { useReducer, useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
+
+import { Button, useDisclosure, Flex } from '@chakra-ui/core';
+
 import {
   VideoBox,
   UserVideo,
   ScreenCapture,
   ElementInspector,
   VideoSources,
+  ModalWindow,
+  ItemForm,
 } from '../..';
+
+import {
+  persistState,
+  recoverState,
+  generateEmptyItem,
+} from '../../lib/utils';
 
 const Frame = styled.div`
   width: 100%;
   height: 100%;
   background-color: #222;
 `;
-
-const persistState = state => {
-  localStorage.setItem('videodrome', JSON.stringify(state));
-};
-
-const recoverState = () => {
-  const state = localStorage.getItem('videodrome');
-
-  return state ? JSON.parse(state) : { elements: [] };
-};
 
 export function reducer(_state, _action) {
   const handleStateUpdate = (state, action) => {
@@ -89,18 +89,23 @@ export function reducer(_state, _action) {
     }
   };
 
+  // persist state to localstorage on every change
   const nextState = handleStateUpdate(_state, _action);
   persistState(nextState);
   return nextState;
 }
 
 export default function VideoFrame() {
+  const [dummyItem, setDummyItem] = useState(generateEmptyItem());
   const [state, dispatch] = useReducer(reducer, {
     elements: [],
   });
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   useEffect(() => {
     try {
+      // recover from localstorage if available
       const stateFromStorage = recoverState();
       dispatch({
         type: 'restoreState',
@@ -127,6 +132,87 @@ export default function VideoFrame() {
   const handleCreateItem = item =>
     dispatch({ type: 'createItem', payload: { item } });
 
+  const renderInner = () => {
+    if (state.elements.length === 0) {
+      return (
+        <Flex
+          align="center"
+          justify="center"
+          style={{ height: '100%', width: '100%' }}
+        >
+          <Button
+            variantColor="teal"
+            variant="ghost"
+            onClick={onOpen}
+          >
+            Add your first Video
+          </Button>
+        </Flex>
+      );
+    } else {
+      return (
+        <>
+          {state.elements.map((el, i) => {
+            switch (el.type) {
+              case 'video':
+                return (
+                  <VideoBox
+                    element={el}
+                    key={`videoframe__child__${i}`}
+                    selected={el.selected}
+                    handleSelect={e => handleSelect(e, el)}
+                    handleUpdate={handleUpdateItem}
+                  />
+                );
+              case 'userMedia':
+                return (
+                  <UserVideo
+                    element={el}
+                    key={`videoframe__child__${i}`}
+                    selected={el.selected}
+                    handleSelect={e => handleSelect(e, el)}
+                    handleUpdate={handleUpdateItem}
+                  />
+                );
+              case 'screenCapture':
+                return (
+                  <ScreenCapture
+                    element={el}
+                    key={`videoframe__child__${i}`}
+                    selected={el.selected}
+                    handleSelect={e => handleSelect(e, el)}
+                    handleUpdate={handleUpdateItem}
+                  />
+                );
+              default:
+                console.warn('Unsupported Element type: ', el.type);
+            }
+          })}
+          <ElementInspector
+            activeElement={getActiveElement()}
+            handleUpdate={handleUpdateItem}
+          />
+
+          <VideoSources
+            onAddItem={item =>
+              dispatch({ type: 'addItem', payload: { item } })
+            }
+            onRemoveItem={id =>
+              dispatch({ type: 'removeItem', payload: { id } })
+            }
+            onSelectItem={id =>
+              dispatch({ type: 'setActive', payload: { id } })
+            }
+            handleUpdate={handleUpdateItem}
+            elements={state.elements}
+            activeElement={getActiveElement()}
+            onOpenModal={onOpen}
+          />
+        </>
+      );
+    }
+  };
+
   return (
     <Frame
       onMouseDown={() => {
@@ -134,62 +220,17 @@ export default function VideoFrame() {
         resetSelection();
       }}
     >
-      {state.elements.map((el, i) => {
-        switch (el.type) {
-          case 'video':
-            return (
-              <VideoBox
-                element={el}
-                key={`videoframe__child__${i}`}
-                selected={el.selected}
-                handleSelect={e => handleSelect(e, el)}
-                handleUpdate={handleUpdateItem}
-              />
-            );
-          case 'userMedia':
-            return (
-              <UserVideo
-                element={el}
-                key={`videoframe__child__${i}`}
-                selected={el.selected}
-                handleSelect={e => handleSelect(e, el)}
-                handleUpdate={handleUpdateItem}
-              />
-            );
-          case 'screenCapture':
-            return (
-              <ScreenCapture
-                element={el}
-                key={`videoframe__child__${i}`}
-                selected={el.selected}
-                handleSelect={e => handleSelect(e, el)}
-                handleUpdate={handleUpdateItem}
-              />
-            );
-          default:
-            console.warn('Unsupported Element type: ', el.type);
-        }
-      })}
-      <ElementInspector
-        activeElement={getActiveElement()}
-        handleUpdate={handleUpdateItem}
-      />
-
-      <VideoSources
-        onAddItem={item =>
-          dispatch({ type: 'addItem', payload: { item } })
-        }
-        onRemoveItem={id =>
-          dispatch({ type: 'removeItem', payload: { id } })
-        }
-        onSelectItem={id =>
-          dispatch({ type: 'setActive', payload: { id } })
-        }
-        handleUpdate={handleUpdateItem}
-        handleCreate={handleCreateItem}
-        elements={state.elements}
-        activeElement={getActiveElement()}
-      />
+      {renderInner()}
+      <ModalWindow isOpen={isOpen} onClose={onClose} title="New Item">
+        <ItemForm
+          onSubmit={data => {
+            console.log({ data });
+            onClose();
+            handleCreateItem(data);
+          }}
+          item={dummyItem}
+        />
+      </ModalWindow>
     </Frame>
   );
 }

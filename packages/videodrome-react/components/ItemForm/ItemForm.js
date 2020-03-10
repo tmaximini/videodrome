@@ -6,7 +6,6 @@ import {
   Input,
   FormControl,
   FormLabel,
-  Select,
   Button,
   Flex,
   Stack,
@@ -19,6 +18,7 @@ const ControlPanel = styled.div`
     padding: 5px;
     margin: 5px 0;
     display: block;
+    width: 100%;
   }
   button {
     cursor: pointer;
@@ -31,6 +31,17 @@ const ControlPanel = styled.div`
     }
   }
 `;
+
+const RESOLUTIONS = {
+  '16:9': {
+    w: 640,
+    h: 360,
+  },
+  '4:3': {
+    w: 640,
+    h: 480,
+  },
+};
 
 export default function ItemForm({ item, onSubmit }) {
   const {
@@ -51,6 +62,37 @@ export default function ItemForm({ item, onSubmit }) {
   }, [item]);
 
   const type = watch('type');
+  const lockAspectRatio = watch('lockAspectRatio');
+  const width = watch('width');
+  const height = watch('height');
+
+  const getWidth = () => {
+    if (lockAspectRatio) {
+      if (type === 'video') {
+        return RESOLUTIONS['16:9'].w;
+      } else {
+        return RESOLUTIONS['4:3'].w;
+      }
+    } else {
+      return width || item.width;
+    }
+  };
+  const getHeight = () => {
+    if (lockAspectRatio) {
+      if (type === 'video') {
+        return RESOLUTIONS['16:9'].h;
+      } else {
+        return RESOLUTIONS['4:3'].h;
+      }
+    } else {
+      return height || item.height;
+    }
+  };
+
+  React.useEffect(() => {
+    setValue('height', getHeight());
+    setValue('width', getWidth());
+  }, [type]);
 
   return (
     <ControlPanel>
@@ -154,7 +196,9 @@ export default function ItemForm({ item, onSubmit }) {
         </div>
         <Button
           onClick={() => {
-            onSubmit(getValues());
+            const vals = getValues();
+            console.log({ vals });
+            onSubmit(vals);
           }}
         >
           Submit

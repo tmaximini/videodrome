@@ -46,6 +46,7 @@ export default function VideoSources({
   activeElement,
   handleUpdate,
   handleCreate,
+  onOpenModal,
 }) {
   const sortByZIndex = (a, b) => {
     if (a.zIndex > b.zIndex) return -1;
@@ -71,6 +72,7 @@ export default function VideoSources({
           activeElement={activeElement}
           handleUpdate={handleUpdate}
           handleCreate={handleCreate}
+          onOpenModal={onOpenModal}
         />
       </VideoSourcesContainer>
     </ControlsContainer>

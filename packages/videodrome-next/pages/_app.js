@@ -3,6 +3,8 @@ import { theme } from '@chakra-ui/core';
 import { ThemeProvider } from '@chakra-ui/core';
 import { Global, css } from '@emotion/core';
 
+import 'normalize.css';
+
 // Let's say you want to add custom colors
 const customTheme = {
   ...theme,

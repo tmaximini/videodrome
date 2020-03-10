@@ -1,37 +1,19 @@
 import React from 'react';
-import { v4 as uuidv4 } from 'uuid';
-
-import { IconButton, useDisclosure } from '@chakra-ui/core';
-import { ModalWindow, ItemForm } from '../..';
-
-const generateEmptyItem = () => ({
-  id: uuidv4(),
-  name: '',
-  x: 200,
-  y: 200,
-  zIndex: 5,
-  width: 640, // 16:9
-  height: 360,
-  lockAspectRatio: true,
-  type: 'video',
-  url: 'https://vimeo.com/395282487',
-});
+import { IconButton } from '@chakra-ui/core';
 
 export default function VideoSourceControls({
   activeElement,
   removeItem,
   handleUpdate,
-  handleCreate,
+  onOpenModal,
 }) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   return (
     <div className="controls">
       <IconButton
         size="xs"
         aria-label="Add Item"
         icon="add"
-        onClick={onOpen}
+        onClick={onOpenModal}
       />
       <IconButton
         size="xs"
@@ -64,15 +46,6 @@ export default function VideoSourceControls({
           })
         }
       />
-      <ModalWindow isOpen={isOpen} onClose={onClose} title="New Item">
-        <ItemForm
-          onSubmit={data => {
-            onClose();
-            handleCreate(data);
-          }}
-          item={generateEmptyItem()}
-        />
-      </ModalWindow>
     </div>
   );
 }
