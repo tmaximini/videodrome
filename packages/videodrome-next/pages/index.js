@@ -1,4 +1,4 @@
-import { VideoFrame } from 'videodrome-react';
+import { VideoFrame } from 'videodrome-react/components';
 
 const Home = () => {
   return (

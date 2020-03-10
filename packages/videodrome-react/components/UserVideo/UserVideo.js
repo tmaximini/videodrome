@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { VideoBox } from '..';
+import React, { useState, useEffect, useContext } from 'react';
+import { VideoBox, AudioContextManager, ItemForm } from '..';
 
 export default function UserVideo(props) {
   const [stream, setStream] = useState();
   const constraints = { audio: true, video: true };
+  const ctx = useContext(AudioContextManager);
 
   const mute = () => {
     if (!stream) return false;
@@ -13,9 +14,20 @@ export default function UserVideo(props) {
   useEffect(() => {
     async function getUserStream() {
       try {
-        setStream(
-          await navigator.mediaDevices.getUserMedia(constraints),
+        const stream = await navigator.mediaDevices.getUserMedia(
+          constraints,
         );
+        setStream(stream);
+
+        console.log({ ctx });
+        if (ctx && ctx.registerAudioTrack) {
+          const track = stream.getAudioTracks()[0];
+          ctx.registerAudioTrack({
+            label: track.label,
+            muted: track.muted,
+            itemName: props.element.name,
+          });
+        }
         /* use the stream */
       } catch (err) {
         /* handle the error */

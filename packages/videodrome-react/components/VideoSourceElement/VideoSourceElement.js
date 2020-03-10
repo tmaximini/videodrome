@@ -1,12 +1,41 @@
 import React from 'react';
+import {
+  IoIosDesktop,
+  IoIosVideocam,
+  IoLogoVimeo,
+  IoLogoYoutube,
+} from 'react-icons/io';
+
+import { Box, Text, Flex } from '@chakra-ui/core';
 
 export default function VideoSourceElement({ onClick, element }) {
+  const getIcon = element => {
+    switch (element.type) {
+      case 'video':
+        if (/vimeo/.test(element.url)) {
+          return (
+            <Box as={IoLogoVimeo} size="18px" color="grey.400" />
+          );
+        }
+        return (
+          <Box as={IoLogoYoutube} size="18px" color="grey.400" />
+        );
+      case 'screenCapture':
+        return <Box as={IoIosDesktop} size="18px" color="grey.400" />;
+      case 'userMedia':
+        return (
+          <Box as={IoIosVideocam} size="18px" color="grey.400" />
+        );
+    }
+  };
+
   return (
-    <div
+    <Flex
       onClick={onClick}
       className={element.selected ? 'item selected' : 'item'}
     >
-      {element.type} <i>({element.name})</i>
-    </div>
+      {getIcon(element)}
+      <p>{element.name}</p>
+    </Flex>
   );
 }

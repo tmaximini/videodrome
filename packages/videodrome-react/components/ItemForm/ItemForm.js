@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { AudioTrackInfo } from '../';
+
 import styled from '@emotion/styled';
 import {
   Input,
@@ -44,7 +46,7 @@ const RESOLUTIONS = {
   },
 };
 
-export default function ItemForm({ item, onSubmit }) {
+export default function ItemForm({ item, onSubmit, audioTrack }) {
   const {
     register,
     handleSubmit,
@@ -129,6 +131,10 @@ export default function ItemForm({ item, onSubmit }) {
             </FormHelperText>
           </>
         )}
+
+        {audioTrack ? (
+          <AudioTrackInfo audioTrack={audioTrack} />
+        ) : null}
 
         <Flex>
           <Stack>

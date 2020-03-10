@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 
 import styled from '@emotion/styled';
-import { ControlsContainer, ItemForm } from '..';
+import { ControlsContainer, ItemForm, AudioContextManager } from '..';
 
 const InspectorContainer = styled.div`
   .form {
@@ -30,11 +30,17 @@ export default function ElementInspector({
     return null;
   }
 
+  const ctx = useContext(AudioContextManager);
+
   return (
     <ControlsContainer title="Inspector" pos="right">
       <InspectorContainer>
         <div className="form">
-          <ItemForm item={activeElement} onSubmit={handleUpdate} />
+          <ItemForm
+            item={activeElement}
+            onSubmit={handleUpdate}
+            audioTrack={ctx?.audioTracks[activeElement.name]}
+          />
         </div>
       </InspectorContainer>
     </ControlsContainer>

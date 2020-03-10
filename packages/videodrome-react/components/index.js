@@ -10,3 +10,4 @@ export { default as VideoSourceControls } from './VideoSourceControls/VideoSourc
 export { default as ItemForm } from './ItemForm/ItemForm';
 export { default as ModalWindow } from './ModalWindow/ModalWindow';
 export { default as AudioTrackInfo } from './AudioTrackInfo/AudioTrackInfo';
+export { default as AudioContextManager } from './AudioContextManager/AudioContextManager';

@@ -1,5 +1,5 @@
 import React, { useReducer, useEffect, useState } from 'react';
-
+import nanoid from 'nanoid';
 import styled from '@emotion/styled';
 
 import { Button, useDisclosure, Flex } from '@chakra-ui/core';
@@ -12,6 +12,7 @@ import {
   VideoSources,
   ModalWindow,
   ItemForm,
+  AudioContextManager,
 } from '..';
 
 import {
@@ -34,9 +35,10 @@ export function reducer(_state, _action) {
           ...item,
           selected: item.id === action.payload.id,
         }));
-        return { elements: newElements };
+        return { ...state, elements: newElements };
       case 'resetSelection':
         return {
+          ...state,
           elements: state.elements.map(el => ({
             ...el,
             selected: false,
@@ -44,6 +46,7 @@ export function reducer(_state, _action) {
         };
       case 'addItem':
         return {
+          ...state,
           elements: [
             ...state.elements,
             {
@@ -56,6 +59,7 @@ export function reducer(_state, _action) {
         };
       case 'removeItem':
         return {
+          ...state,
           elements: state.elements.filter(
             item => item.id !== action.payload.id,
           ),
@@ -67,10 +71,11 @@ export function reducer(_state, _action) {
 
         if (index === undefined) {
           console.warn('index not found');
-          return { elements: state.elements };
+          return { ...state };
         }
 
         return {
+          ...state,
           elements: [
             ...state.elements.slice(0, index),
             { ...state.elements[index], ...action.payload.item },
@@ -79,11 +84,24 @@ export function reducer(_state, _action) {
         };
       case 'createItem':
         return {
-          elements: [...state.elements, { ...action.payload.item }],
+          ...state,
+          elements: [
+            ...state.elements,
+            { ...action.payload.item, id: nanoid() },
+          ],
         };
-
       case 'restoreState':
         return action.payload.state;
+      case 'registerAudioTrack':
+        return {
+          ...state,
+          audioTracks: {
+            ...state.audioTracks,
+            [action.payload.audioTrack.itemName]:
+              action.payload.audioTrack,
+          },
+        };
+
       default:
         throw new Error();
     }
@@ -99,6 +117,7 @@ export default function VideoFrame() {
   const [dummyItem, setDummyItem] = useState(generateEmptyItem());
   const [state, dispatch] = useReducer(reducer, {
     elements: [],
+    audioTracks: {},
   });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -131,6 +150,14 @@ export default function VideoFrame() {
 
   const handleCreateItem = item =>
     dispatch({ type: 'createItem', payload: { item } });
+
+  const registerAudioTrack = audioTrack => {
+    console.info('registering audio track', audioTrack);
+    dispatch({
+      type: 'registerAudioTrack',
+      payload: { audioTrack },
+    });
+  };
 
   const renderInner = () => {
     if (state.elements.length === 0) {
@@ -214,23 +241,31 @@ export default function VideoFrame() {
   };
 
   return (
-    <Frame
-      onMouseDown={() => {
-        // reset selection on outside click
-        resetSelection();
-      }}
+    <AudioContextManager.Provider
+      value={{ audioTracks: state.audioTracks, registerAudioTrack }}
     >
-      {renderInner()}
-      <ModalWindow isOpen={isOpen} onClose={onClose} title="New Item">
-        <ItemForm
-          onSubmit={data => {
-            console.log({ data });
-            onClose();
-            handleCreateItem(data);
-          }}
-          item={dummyItem}
-        />
-      </ModalWindow>
-    </Frame>
+      <Frame
+        onMouseDown={() => {
+          // reset selection on outside click
+          resetSelection();
+        }}
+      >
+        {renderInner()}
+        <ModalWindow
+          isOpen={isOpen}
+          onClose={onClose}
+          title="New Item"
+        >
+          <ItemForm
+            onSubmit={data => {
+              console.log({ data });
+              onClose();
+              handleCreateItem(data);
+            }}
+            item={dummyItem}
+          />
+        </ModalWindow>
+      </Frame>
+    </AudioContextManager.Provider>
   );
 }

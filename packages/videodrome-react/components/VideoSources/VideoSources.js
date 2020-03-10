@@ -19,10 +19,17 @@ const VideoSourcesContainer = styled.div`
 
   .item {
     width: 100%;
-    padding: 2px 0;
+    padding: 2px 5px;
     display: block;
     text-indent: 5px;
     cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    p {
+      margin: 3px;
+    }
   }
   .selected {
     background-color: #3182ce;

@@ -1,7 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
-
 export const generateEmptyItem = () => ({
-  id: uuidv4(),
   name: '',
   x: 200,
   y: 200,
@@ -20,5 +17,7 @@ export const persistState = state => {
 export const recoverState = () => {
   const state = localStorage.getItem('videodrome');
 
-  return state ? JSON.parse(state) : { elements: [] };
+  return state
+    ? JSON.parse(state)
+    : { elements: [], audioTracks: {} };
 };
