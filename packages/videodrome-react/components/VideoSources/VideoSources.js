@@ -74,7 +74,6 @@ export default function VideoSources({
           ))}
         </div>
         <VideoSourceControls
-          addItem={onAddItem}
           removeItem={onRemoveItem}
           activeElement={activeElement}
           handleUpdate={handleUpdate}

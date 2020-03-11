@@ -8,13 +8,10 @@ export default function ScreenCapture(props) {
     async function getDisplayStream() {
       let captureStream = null;
       try {
-        console.info('yo');
         captureStream = await navigator.mediaDevices.getDisplayMedia({
           video: true,
           audio: false,
         });
-
-        console.info({ captureStream });
 
         setStream(captureStream);
         /* use the stream */

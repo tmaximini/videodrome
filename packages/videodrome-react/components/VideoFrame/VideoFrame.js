@@ -44,19 +44,6 @@ export function reducer(_state, _action) {
             selected: false,
           })),
         };
-      case 'addItem':
-        return {
-          ...state,
-          elements: [
-            ...state.elements,
-            {
-              ...action.payload.item,
-              zIndex:
-                action.payload.item.zIndex ||
-                state.elements.length + 1,
-            },
-          ],
-        };
       case 'removeItem':
         return {
           ...state,
@@ -87,7 +74,13 @@ export function reducer(_state, _action) {
           ...state,
           elements: [
             ...state.elements,
-            { ...action.payload.item, id: nanoid() },
+            {
+              ...action.payload.item,
+              id: action.payload.item.id || nanoid(),
+              zIndex:
+                action.payload.item.zIndex ||
+                state.elements.length + 1,
+            },
           ],
         };
       case 'restoreState':
@@ -150,6 +143,9 @@ export default function VideoFrame() {
 
   const handleCreateItem = item =>
     dispatch({ type: 'createItem', payload: { item } });
+
+  const handleRemoveItem = id =>
+    dispatch({ type: 'removeItem', payload: { id } });
 
   const registerAudioTrack = audioTrack => {
     console.info('registering audio track', audioTrack);
@@ -221,12 +217,7 @@ export default function VideoFrame() {
           />
 
           <VideoSources
-            onAddItem={item =>
-              dispatch({ type: 'addItem', payload: { item } })
-            }
-            onRemoveItem={id =>
-              dispatch({ type: 'removeItem', payload: { id } })
-            }
+            onRemoveItem={handleRemoveItem}
             onSelectItem={id =>
               dispatch({ type: 'setActive', payload: { id } })
             }

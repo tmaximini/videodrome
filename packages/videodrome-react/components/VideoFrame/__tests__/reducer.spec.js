@@ -12,7 +12,7 @@ describe('VideoFrame reducer', () => {
   it('it can add items', () => {
     const initialState = { elements: [] };
     const action = {
-      type: 'addItem',
+      type: 'createItem',
       payload: {
         item: defaultItem,
       },
@@ -25,7 +25,7 @@ describe('VideoFrame reducer', () => {
   it('it adds a default zIndex if none is provided', () => {
     const initialState = { elements: [{ id: 'test', zIndex: 1 }] };
     const action = {
-      type: 'addItem',
+      type: 'createItem',
       payload: {
         item: { id: 'yo' },
       },
