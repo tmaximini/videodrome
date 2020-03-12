@@ -2,7 +2,7 @@ import * as React from 'react';
 import { CanvasContext } from '../';
 import { calculateSize } from '../../lib/utils';
 
-function App() {
+function CanvasCamera({ element }) {
   const canvasCtx = React.useContext(CanvasContext);
 
   let requestId = null;
@@ -15,22 +15,12 @@ function App() {
       const ctx = canvas.getContext('2d');
       ctx.clearRect(0, 0, window.innerHeight, window.innerWidth);
       if (video.readyState === video.HAVE_ENOUGH_DATA) {
-        const videoSize = {
-          width: video.videoWidth,
-          height: video.videoHeight,
-        };
-        const canvasSize = {
-          width: canvas.width,
-          height: canvas.height,
-        };
-        const renderSize = calculateSize(videoSize, canvasSize);
-        const xOffset = (canvasSize.width - renderSize.width) / 2;
         ctx.drawImage(
           video,
-          xOffset,
-          0,
-          renderSize.width,
-          renderSize.height,
+          element.x,
+          element.y,
+          element.videoWidth || element.width,
+          element.videoHeight || element.height,
         );
       }
       requestId = requestAnimationFrame(draw);
@@ -62,4 +52,4 @@ function App() {
 
   return null;
 }
-export default App;
+export default CanvasCamera;

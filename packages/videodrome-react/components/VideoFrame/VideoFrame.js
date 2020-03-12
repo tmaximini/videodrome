@@ -19,6 +19,7 @@ import {
   ItemForm,
   AudioContextManager,
   CanvasContext,
+  ControlCenter,
   CanvasCamera,
 } from '..';
 
@@ -32,9 +33,9 @@ const Frame = styled.div`
   width: 100%;
   height: 100%;
   background-color: #222;
-  video {
+  /* video {
     display: none;
-  }
+  } */
 `;
 
 const Canvas = styled.canvas`
@@ -43,6 +44,12 @@ const Canvas = styled.canvas`
   position: fixed;
   top: 0;
   left: 0;
+`;
+
+const HiddenVideoContainer = styled.div`
+  video {
+    display: none;
+  }
 `;
 
 export function reducer(_state, _action) {
@@ -125,7 +132,8 @@ export function reducer(_state, _action) {
 }
 
 export default function VideoFrame() {
-  const [dummyItem, setDummyItem] = useState(generateEmptyItem());
+  const [dummyItem] = useState(generateEmptyItem());
+  const [mode, setMode] = useState('arrangement');
 
   const [canvas, setCanvas] = useState(null);
 
@@ -233,17 +241,19 @@ export default function VideoFrame() {
                   />
                 );
               case 'userMedia':
-                return (
-                  <CanvasCamera
+                return mode === 'arrangement' ? (
+                  <UserVideo
                     element={el}
                     key={`videoframe__child__${i}`}
                     selected={el.selected}
                     handleSelect={e => handleSelect(e, el)}
                     handleUpdate={handleUpdateItem}
                   />
+                ) : (
+                  <CanvasCamera element={el} />
                 );
               case 'screenCapture':
-                return (
+                return mode === 'arrangement' ? (
                   <ScreenCapture
                     element={el}
                     key={`videoframe__child__${i}`}
@@ -251,25 +261,30 @@ export default function VideoFrame() {
                     handleSelect={e => handleSelect(e, el)}
                     handleUpdate={handleUpdateItem}
                   />
-                );
+                ) : null;
               default:
                 console.warn('Unsupported Element type: ', el.type);
             }
           })}
-          <ElementInspector
-            activeElement={getActiveElement()}
-            handleUpdate={handleUpdateItem}
-          />
-          <VideoSources
-            onRemoveItem={handleRemoveItem}
-            onSelectItem={id =>
-              dispatch({ type: 'setActive', payload: { id } })
-            }
-            handleUpdate={handleUpdateItem}
-            elements={state.elements}
-            activeElement={getActiveElement()}
-            onOpenModal={onOpen}
-          />
+          {mode === 'arrangement' ? (
+            <>
+              <ElementInspector
+                activeElement={getActiveElement()}
+                handleUpdate={handleUpdateItem}
+              />
+              <VideoSources
+                onRemoveItem={handleRemoveItem}
+                onSelectItem={id =>
+                  dispatch({ type: 'setActive', payload: { id } })
+                }
+                handleUpdate={handleUpdateItem}
+                elements={state.elements}
+                activeElement={getActiveElement()}
+                onOpenModal={onOpen}
+              />
+            </>
+          ) : null}
+          <ControlCenter mode={mode} setMode={setMode} />
         </>
       );
     }
@@ -277,6 +292,12 @@ export default function VideoFrame() {
 
   return (
     <CanvasContext.Provider value={{ canvas, cameraRef, screenRef }}>
+      {mode === 'live' ? (
+        <HiddenVideoContainer>
+          <video ref={cameraRef} autoPlay />
+          <video ref={screenRef} autoPlay />
+        </HiddenVideoContainer>
+      ) : null}
       <AudioContextManager.Provider
         value={{ audioTracks: state.audioTracks, registerAudioTrack }}
       >
@@ -286,8 +307,6 @@ export default function VideoFrame() {
             resetSelection();
           }}
         >
-          <video ref={cameraRef} autoPlay />
-          <video ref={screenRef} autoPlay />
           <Canvas ref={canvasRef} id="canvas" />
           {renderInner()}
           <ModalWindow

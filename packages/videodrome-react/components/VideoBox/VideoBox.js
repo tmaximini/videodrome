@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import ReactPlayer from 'react-player';
 import { Rnd } from 'react-rnd';
 
@@ -44,6 +44,8 @@ export default function VideoBox({
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
 
+  const videoRef = useRef(null);
+
   return (
     <Rnd
       default={{
@@ -57,13 +59,27 @@ export default function VideoBox({
       onResizeStart={() => setIsResizing(true)}
       onResizeStop={() => setIsResizing(false)}
       onDragStop={(e, item) => {
-        handleUpdate({ x: item.x, y: item.x, id });
+        console.info(videoRef.current.getInternalPlayer());
+
+        handleUpdate({
+          x: item.x,
+          y: item.y,
+          id,
+          videoWidth: videoRef.current.getInternalPlayer()
+            .clientWidth,
+          videoHeight: videoRef.current.getInternalPlayer()
+            .clientHeight,
+        });
         setIsDragging(false);
       }}
       onResizeStop={(e, direction, ref, delta, position) => {
         handleUpdate({
           width: parseInt(ref.clientWidth),
           height: parseInt(ref.clientHeight),
+          videoWidth: videoRef.current.getInternalPlayer()
+            .clientWidth,
+          videoHeight: videoRef.current.getInternalPlayer()
+            .clientHeight,
           id,
         });
         setIsResizing(false);
@@ -78,6 +94,7 @@ export default function VideoBox({
         id={id}
       >
         <ReactPlayer
+          ref={videoRef}
           url={url}
           playing
           loop

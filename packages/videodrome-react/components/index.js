@@ -13,3 +13,5 @@ export { default as AudioTrackInfo } from './AudioTrackInfo/AudioTrackInfo';
 export { default as AudioContextManager } from './AudioContextManager/AudioContextManager';
 export { default as CanvasContext } from './CanvasContext/CanvasContext';
 export { default as CanvasCamera } from './CanvasCamera/CanvasCamera';
+export { default as ControlCenter } from './ControlCenter/ControlCenter';
+export { default as MainControls } from './MainControls/MainControls';
