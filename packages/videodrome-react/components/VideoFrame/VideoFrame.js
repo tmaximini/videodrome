@@ -1,4 +1,9 @@
-import React, { useReducer, useEffect, useState } from 'react';
+import React, {
+  useReducer,
+  useEffect,
+  useState,
+  useRef,
+} from 'react';
 import nanoid from 'nanoid';
 import styled from '@emotion/styled';
 
@@ -13,6 +18,8 @@ import {
   ModalWindow,
   ItemForm,
   AudioContextManager,
+  CanvasContext,
+  CanvasCamera,
 } from '..';
 
 import {
@@ -25,6 +32,17 @@ const Frame = styled.div`
   width: 100%;
   height: 100%;
   background-color: #222;
+  video {
+    display: none;
+  }
+`;
+
+const Canvas = styled.canvas`
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
 `;
 
 export function reducer(_state, _action) {
@@ -108,12 +126,39 @@ export function reducer(_state, _action) {
 
 export default function VideoFrame() {
   const [dummyItem, setDummyItem] = useState(generateEmptyItem());
+
+  const [canvas, setCanvas] = useState(null);
+
+  const cameraRef = useRef(null);
+  const screenRef = useRef(null);
+  const canvasRef = useRef(null);
+
   const [state, dispatch] = useReducer(reducer, {
     elements: [],
     audioTracks: {},
   });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  useEffect(() => {
+    const cnvs = document.getElementById('canvas');
+    const updateCanvasSize = () => {
+      console.log('resizing canvas', canvas);
+      canvasRef.current.height = window.innerHeight;
+      canvasRef.current.width = window.innerWidth;
+      setCanvas(cnvs);
+      return true;
+    };
+
+    if (canvasRef && canvasRef.current) {
+      updateCanvasSize();
+      window.addEventListener('resize', updateCanvasSize);
+    }
+
+    return () => {
+      window.removeEventListener('resize', updateCanvasSize);
+    };
+  }, []);
 
   useEffect(() => {
     try {
@@ -189,7 +234,7 @@ export default function VideoFrame() {
                 );
               case 'userMedia':
                 return (
-                  <UserVideo
+                  <CanvasCamera
                     element={el}
                     key={`videoframe__child__${i}`}
                     selected={el.selected}
@@ -215,7 +260,6 @@ export default function VideoFrame() {
             activeElement={getActiveElement()}
             handleUpdate={handleUpdateItem}
           />
-
           <VideoSources
             onRemoveItem={handleRemoveItem}
             onSelectItem={id =>
@@ -232,31 +276,36 @@ export default function VideoFrame() {
   };
 
   return (
-    <AudioContextManager.Provider
-      value={{ audioTracks: state.audioTracks, registerAudioTrack }}
-    >
-      <Frame
-        onMouseDown={() => {
-          // reset selection on outside click
-          resetSelection();
-        }}
+    <CanvasContext.Provider value={{ canvas, cameraRef, screenRef }}>
+      <AudioContextManager.Provider
+        value={{ audioTracks: state.audioTracks, registerAudioTrack }}
       >
-        {renderInner()}
-        <ModalWindow
-          isOpen={isOpen}
-          onClose={onClose}
-          title="New Item"
+        <Frame
+          onMouseDown={() => {
+            // reset selection on outside click
+            resetSelection();
+          }}
         >
-          <ItemForm
-            onSubmit={data => {
-              console.log({ data });
-              onClose();
-              handleCreateItem(data);
-            }}
-            item={dummyItem}
-          />
-        </ModalWindow>
-      </Frame>
-    </AudioContextManager.Provider>
+          <video ref={cameraRef} autoPlay />
+          <video ref={screenRef} autoPlay />
+          <Canvas ref={canvasRef} id="canvas" />
+          {renderInner()}
+          <ModalWindow
+            isOpen={isOpen}
+            onClose={onClose}
+            title="New Item"
+          >
+            <ItemForm
+              onSubmit={data => {
+                console.log({ data });
+                onClose();
+                handleCreateItem(data);
+              }}
+              item={dummyItem}
+            />
+          </ModalWindow>
+        </Frame>
+      </AudioContextManager.Provider>
+    </CanvasContext.Provider>
   );
 }

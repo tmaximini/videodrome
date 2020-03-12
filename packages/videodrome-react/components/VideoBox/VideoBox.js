@@ -27,13 +27,13 @@ const VideoContainer = styled.div`
 
 export default function VideoBox({
   element: {
+    id,
     url,
     x,
     y,
     width,
     height,
     zIndex,
-    id,
     showControls,
     lockAspectRatio,
   },
@@ -75,6 +75,7 @@ export default function VideoBox({
         isDragging={isDragging}
         isResizing={isResizing}
         selected={selected}
+        id={id}
       >
         <ReactPlayer
           url={url}

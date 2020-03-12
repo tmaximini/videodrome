@@ -21,3 +21,19 @@ export const recoverState = () => {
     ? JSON.parse(state)
     : { elements: [], audioTracks: {} };
 };
+
+export const calculateSize = (srcSize, dstSize) => {
+  const srcRatio = srcSize.width / srcSize.height;
+  const dstRatio = dstSize.width / dstSize.height;
+  if (dstRatio > srcRatio) {
+    return {
+      width: dstSize.height * srcRatio,
+      height: dstSize.height,
+    };
+  } else {
+    return {
+      width: dstSize.width,
+      height: dstSize.width / srcRatio,
+    };
+  }
+};
