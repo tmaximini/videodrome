@@ -21,6 +21,7 @@ import {
   CanvasContext,
   ControlCenter,
   CanvasCamera,
+  CanvasRoot,
 } from '..';
 
 import {
@@ -44,12 +45,6 @@ const Canvas = styled.canvas`
   position: fixed;
   top: 0;
   left: 0;
-`;
-
-const HiddenVideoContainer = styled.div`
-  video {
-    display: none;
-  }
 `;
 
 export function reducer(_state, _action) {
@@ -249,9 +244,7 @@ export default function VideoFrame() {
                     handleSelect={e => handleSelect(e, el)}
                     handleUpdate={handleUpdateItem}
                   />
-                ) : (
-                  <CanvasCamera element={el} />
-                );
+                ) : null;
               case 'screenCapture':
                 return mode === 'arrangement' ? (
                   <ScreenCapture
@@ -292,12 +285,6 @@ export default function VideoFrame() {
 
   return (
     <CanvasContext.Provider value={{ canvas, cameraRef, screenRef }}>
-      {mode === 'live' ? (
-        <HiddenVideoContainer>
-          <video ref={cameraRef} autoPlay />
-          <video ref={screenRef} autoPlay />
-        </HiddenVideoContainer>
-      ) : null}
       <AudioContextManager.Provider
         value={{ audioTracks: state.audioTracks, registerAudioTrack }}
       >
@@ -307,7 +294,7 @@ export default function VideoFrame() {
             resetSelection();
           }}
         >
-          <Canvas ref={canvasRef} id="canvas" />
+          <CanvasRoot elements={state.elements} />
           {renderInner()}
           <ModalWindow
             isOpen={isOpen}

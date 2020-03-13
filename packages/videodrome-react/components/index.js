@@ -11,6 +11,7 @@ export { default as ItemForm } from './ItemForm/ItemForm';
 export { default as ModalWindow } from './ModalWindow/ModalWindow';
 export { default as AudioTrackInfo } from './AudioTrackInfo/AudioTrackInfo';
 export { default as AudioContextManager } from './AudioContextManager/AudioContextManager';
+export { default as CanvasRoot } from './CanvasRoot/CanvasRoot';
 export { default as CanvasContext } from './CanvasContext/CanvasContext';
 export { default as CanvasCamera } from './CanvasCamera/CanvasCamera';
 export { default as ControlCenter } from './ControlCenter/ControlCenter';
