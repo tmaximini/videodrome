@@ -57,7 +57,7 @@ export default function VideoBox({
       onResizeStart={() => setIsResizing(true)}
       onResizeStop={() => setIsResizing(false)}
       onDragStop={(e, item) => {
-        handleUpdate({ x: item.x, y: item.x, id });
+        handleUpdate({ x: item.x, y: item.y, id });
         setIsDragging(false);
       }}
       onResizeStop={(e, direction, ref, delta, position) => {
