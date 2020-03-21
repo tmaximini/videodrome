@@ -2,7 +2,9 @@
 
 Manage and arrange multiple media elements in the browser.
 
-Demo: https://videodrome.tmaximini.now.sh/
+![demo gif](demo.gif)
+
+Live Demo: https://videodrome.tmaximini.now.sh/
 
 ## development
 
